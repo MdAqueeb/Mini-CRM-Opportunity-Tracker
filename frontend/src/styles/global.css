@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  ============================================================
+  GLOBAL DESIGN SYSTEM
+  ------------------------------------------------------------
+  Colors, typography and spacing tokens are defined in
+  tailwind.config.js and consumed through utility classes.
+  This file holds base resets and a few reusable component
+  classes so we don't repeat long class strings everywhere.
+  ============================================================
+*/
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-background text-secondary font-sans antialiased;
+}
+
+/* Typography helpers (matches the design system scale) */
+.h1 {
+  @apply text-[32px] font-bold leading-tight;
+}
+.h2 {
+  @apply text-2xl font-semibold leading-snug;
+}
+.text-small {
+  @apply text-xs;
+}
+
+/* Reusable surface / card */
+.card {
+  @apply bg-white rounded-xl border border-slate-200 shadow-sm;
+}
+
+/* Subtle entrance animation used across pages (bonus: smooth animations) */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in-up 0.25s ease-out both;
+}
+
+/* Skeleton shimmer (bonus: skeleton loaders) */
+.skeleton {
+  @apply bg-slate-200 rounded animate-pulse;
+}
+
+/* Custom focus ring for inputs/buttons */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary;
+}
