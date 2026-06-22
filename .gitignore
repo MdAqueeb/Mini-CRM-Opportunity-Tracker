@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.example
+
+# Logs
+logs/
+*.log
+
+# Build outputs
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Docker
+*.pid
+
+# Coverage reports
+coverage/
+
+# Optional
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
