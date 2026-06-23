@@ -27,9 +27,7 @@ const Navbar = () => {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <div className="flex items-center gap-6">
           <Link to="/dashboard" className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white">
-              CR
-            </span>
+            <img src="/logo.svg" alt="Opportunity Tracker logo" className="h-8 w-8" />
             <span className="hidden text-base font-semibold text-secondary sm:block">
               Opportunity Tracker
             </span>

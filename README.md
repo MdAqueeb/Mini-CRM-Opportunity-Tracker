@@ -5,6 +5,20 @@ opportunity pipeline. Users register/log in, create opportunities, and view the
 whole team's pipeline — but can only edit or delete the opportunities they own.
 Ownership is enforced on the backend, never trusted from the client.
 
+## Live demo
+
+| Service  | URL |
+| -------- | --- |
+| **Frontend** | https://mini-crm-opportunity-tracker-taupe.vercel.app |
+| **Backend (API)** | https://mini-crm-opportunity-tracker-gq5b.onrender.com/api |
+| **API docs (Swagger)** | https://mini-crm-opportunity-tracker-gq5b.onrender.com/api-docs |
+
+**Test login** (either account, password `password123`):
+`alice@crm.com` · `ben@crm.com`
+
+> The backend runs on Render's free tier, which sleeps after inactivity — the
+> first request may take ~50s to wake up.
+
 ## Tech stack
 
 **Backend:** Node.js, Express, MongoDB + Mongoose, JWT, bcryptjs, Zod
@@ -47,11 +61,13 @@ npm run dev               # http://localhost:5173
 
 **backend/.env**
 
-| Variable     | Description                              |
-| ------------ | ---------------------------------------- |
-| `PORT`       | Server port (e.g. `5000`)                |
-| `MONGO_URI`  | MongoDB connection string (Atlas/local)  |
-| `JWT_SECRET` | Secret used to sign JWTs (keep private)  |
+| Variable     | Description                                                     |
+| ------------ | -------------------------------------------------------------- |
+| `PORT`       | Server port for local dev (e.g. `5000`). Hosts set this themselves. |
+| `MONGO_URI`  | MongoDB connection string (Atlas/local)                        |
+| `JWT_SECRET` | Secret used to sign JWTs (keep private)                         |
+| `CLIENT_URL` | Deployed frontend origin; locks CORS to it. Blank = open (dev) |
+| `API_URL`    | Public API base URL shown in Swagger. Blank = localhost (dev)  |
 
 **frontend/.env**
 
@@ -88,21 +104,24 @@ The app is designed to deploy as two services plus a hosted database:
 
 1. **Database** — create a free cluster on MongoDB Atlas, copy its connection
    string into the backend `MONGO_URI`.
-2. **Backend** — deploy `backend/` to Render or Railway. Set `MONGO_URI`,
-   `JWT_SECRET`, and `PORT` as environment variables. Start command: `npm start`.
+2. **Backend** — deploy `backend/` to Render or Railway (root dir `backend`,
+   start command `npm start`). Set `MONGO_URI`, `JWT_SECRET`, `CLIENT_URL`
+   (your frontend URL), and optionally `API_URL`. Do **not** set `PORT` — the
+   host provides it.
 3. **Frontend** — deploy `frontend/` to Vercel or Netlify. Set `VITE_API_URL` to
    the deployed backend's `/api` URL. Build command: `npm run build`,
    output dir: `dist`.
 
-> CORS is currently open (`cors()`) on the backend. For production you may want
-> to restrict it to the deployed frontend origin.
+CORS is locked to the frontend origin in production via the `CLIENT_URL` env
+var (falls back to open for local dev when unset).
 
-**Live URLs**
+This project is deployed as:
 
-| Service  | URL          |
-| -------- | ------------ |
-| Frontend | _add link_   |
-| Backend  | _add link_   |
+| Service  | Platform | URL |
+| -------- | -------- | --- |
+| Frontend | Vercel   | https://mini-crm-opportunity-tracker-taupe.vercel.app |
+| Backend  | Render   | https://mini-crm-opportunity-tracker-gq5b.onrender.com |
+| Database | MongoDB Atlas | hosted cluster |
 
 ## Known limitations / pending improvements
 
@@ -111,5 +130,5 @@ The app is designed to deploy as two services plus a hosted database:
   server-side would scale better for large pipelines.
 - No automated tests yet (auth + ownership are the highest-value targets).
 - No Docker setup.
-- CORS is open and should be locked to the frontend origin in production.
+- Render's free tier cold-starts after inactivity (~50s first request).
 ```

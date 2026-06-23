@@ -80,9 +80,7 @@ export const AuthShell = ({ title, subtitle, children, footer }) => (
   <div className="flex min-h-screen items-center justify-center bg-background p-4">
     <div className="card animate-fade-in w-full max-w-md p-8">
       <div className="mb-6 flex flex-col items-center text-center">
-        <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-lg font-bold text-white">
-          CR
-        </span>
+        <img src="/logo.svg" alt="Opportunity Tracker logo" className="mb-3 h-12 w-12" />
         <h1 className="text-2xl font-bold text-secondary">{title}</h1>
         <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
       </div>
