@@ -6,6 +6,11 @@ import {
 } from "../controllers/authController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
+import {
+  validate,
+  registerSchema,
+  loginSchema
+} from "../middleware/validationMiddleware.js";
 
 const router = express.Router();
 
@@ -56,7 +61,7 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
-router.post("/register", registerUser);
+router.post("/register", validate(registerSchema), registerUser);
 
 // =======================
 // LOGIN USER
@@ -94,7 +99,7 @@ router.post("/register", registerUser);
  *       500:
  *         description: Server error
  */
-router.post("/login", loginUser);
+router.post("/login", validate(loginSchema), loginUser);
 
 // =======================
 // GET LOGGED IN USER

@@ -97,11 +97,27 @@ const Dashboard = () => {
 
       {/* Filters */}
       <div className="card mt-6 grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Input
-          placeholder="Search customer, requirement, owner…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <div className="relative">
+          <Input
+            placeholder="Search customer, requirement, owner…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={search ? "pr-9" : ""}
+          />
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch("")}
+              aria-label="Clear search"
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          )}
+        </div>
         <Select value={stage} onChange={(e) => setStage(e.target.value)}>
           <option value="">All stages</option>
           {STAGES.map((s) => (

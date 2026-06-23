@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Input } from "../components/Input";
+import { Input, PasswordInput } from "../components/Input";
 import Button from "../components/Button";
 import { useAuth } from "../context/AuthContext";
 import { authAPI } from "../services/api";
@@ -60,9 +60,8 @@ const Login = () => {
           error={errors.email?.message}
           {...register("email")}
         />
-        <Input
+        <PasswordInput
           label="Password"
-          type="password"
           placeholder="••••••••"
           autoComplete="current-password"
           error={errors.password?.message}

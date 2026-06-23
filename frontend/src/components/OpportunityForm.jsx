@@ -16,22 +16,23 @@ import { toDateInput } from "../utils/helpers";
 // silently do nothing. This keeps the UI honest about the API.
 // ============================================================
 
-const optionalEmail = z
-  .string()
-  .trim()
-  .email("Enter a valid email")
-  .optional()
-  .or(z.literal(""));
-
 const schema = z.object({
   customerName: z.string().trim().min(1, "Customer name is required"),
   requirement: z.string().trim().min(1, "Requirement is required"),
-  contactName: z.string().trim().optional().or(z.literal("")),
-  contactEmail: optionalEmail,
-  contactPhone: z.string().trim().optional().or(z.literal("")),
+  contactName: z.string().trim().min(1, "Contact name is required"),
+  contactEmail: z
+    .string()
+    .trim()
+    .min(1, "Contact email is required")
+    .email("Enter a valid email"),
+  contactPhone: z
+    .string()
+    .trim()
+    .min(1, "Contact phone is required")
+    .regex(/^\d{10}$/, "Enter a valid 10-digit phone number"),
   estimatedValue: z.coerce
     .number({ invalid_type_error: "Must be a number" })
-    .min(0, "Cannot be negative"),
+    .positive("Estimated value is required"),
   stage: z.enum(STAGES),
   priority: z.enum(PRIORITIES),
   nextFollowUpDate: z.string().optional().or(z.literal("")),
@@ -96,6 +97,9 @@ const OpportunityForm = ({
     return onSubmit(payload);
   };
 
+  // Phone: digits only, max 10, shown with a fixed +91 prefix.
+  const phone = register("contactPhone");
+
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-5">
       {isEdit && (
@@ -117,6 +121,7 @@ const OpportunityForm = ({
         <Input
           label="Estimated value (₹)"
           type="number"
+          required
           min="0"
           placeholder="50000"
           error={errors.estimatedValue?.message}
@@ -137,6 +142,7 @@ const OpportunityForm = ({
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
         <Input
           label="Contact name"
+          required
           placeholder="John Doe"
           disabled={isEdit}
           error={errors.contactName?.message}
@@ -144,6 +150,7 @@ const OpportunityForm = ({
         />
         <Input
           label="Contact email"
+          required
           placeholder="john@abc.com"
           disabled={isEdit}
           error={errors.contactEmail?.message}
@@ -151,10 +158,20 @@ const OpportunityForm = ({
         />
         <Input
           label="Contact phone"
-          placeholder="9999999999"
+          prefix="+91"
+          placeholder="10-digit number"
+          inputMode="numeric"
+          required
+          maxLength={10}
           disabled={isEdit}
           error={errors.contactPhone?.message}
-          {...register("contactPhone")}
+          name={phone.name}
+          ref={phone.ref}
+          onBlur={phone.onBlur}
+          onChange={(e) => {
+            e.target.value = e.target.value.replace(/\D/g, "").slice(0, 10);
+            phone.onChange(e);
+          }}
         />
       </div>
 

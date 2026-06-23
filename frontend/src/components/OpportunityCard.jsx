@@ -29,6 +29,7 @@ const OpportunityCard = ({ opportunity, isOwner }) => {
     priority,
     owner,
     nextFollowUpDate,
+    createdAt,
   } = opportunity;
 
   return (
@@ -74,9 +75,12 @@ const OpportunityCard = ({ opportunity, isOwner }) => {
         </div>
       </div>
 
-      <p className="text-xs text-slate-400">
-        Owner: <span className="text-slate-600">{owner?.name || "Unknown"}</span>
-      </p>
+      <div className="flex items-center justify-between text-xs text-slate-400">
+        <span>
+          Owner: <span className="text-slate-600">{owner?.name || "Unknown"}</span>
+        </span>
+        <span>Created {formatDate(createdAt)}</span>
+      </div>
     </Link>
   );
 };

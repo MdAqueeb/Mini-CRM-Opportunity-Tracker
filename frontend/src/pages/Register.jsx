@@ -3,10 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Input } from "../components/Input";
+import { Input, PasswordInput } from "../components/Input";
 import Button from "../components/Button";
 import { authAPI } from "../services/api";
-import { useAuth } from "../context/AuthContext";
 import { getErrorMessage } from "../utils/helpers";
 import { AuthShell } from "./Login";
 
@@ -18,7 +17,6 @@ const schema = z.object({
 
 const Register = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const {
     register,
@@ -28,17 +26,9 @@ const Register = () => {
 
   const onSubmit = async (values) => {
     try {
-      // Backend register returns the user but NOT a token, so we log in
-      // immediately afterwards for a smooth one-step signup experience.
       await authAPI.register(values);
-      const { data } = await authAPI.login({
-        email: values.email,
-        password: values.password,
-      });
-      const { token, user } = data.data;
-      login(token, user);
-      toast.success("Account created — welcome!");
-      navigate("/dashboard", { replace: true });
+      toast.success("Account created — please sign in");
+      navigate("/login", { replace: true });
     } catch (error) {
       toast.error(getErrorMessage(error, "Registration failed"));
     }
@@ -73,9 +63,8 @@ const Register = () => {
           error={errors.email?.message}
           {...register("email")}
         />
-        <Input
+        <PasswordInput
           label="Password"
-          type="password"
           placeholder="At least 6 characters"
           autoComplete="new-password"
           error={errors.password?.message}

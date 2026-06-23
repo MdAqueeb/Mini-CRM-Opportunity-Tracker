@@ -8,6 +8,7 @@ import connectDB from "./config/db.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import opportunityRoutes from "./routes/opportunityRoutes.js";
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
 
@@ -19,7 +20,9 @@ const app = express();
 // --------------------
 // Middlewares
 // --------------------
-app.use(cors());
+// Lock CORS to the deployed frontend when CLIENT_URL is set;
+// otherwise (local dev) allow all origins.
+app.use(cors(process.env.CLIENT_URL ? { origin: process.env.CLIENT_URL } : {}));
 app.use(express.json());
 app.use(morgan("dev"));
 
@@ -48,6 +51,13 @@ app.get("/api", (req, res) => {
 });
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// --------------------
+// Error handling (must be last)
+// --------------------
+app.use(notFound);
+app.use(errorHandler);
+
 // --------------------
 // Start server
 // --------------------
